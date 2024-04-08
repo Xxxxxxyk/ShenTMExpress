@@ -23,19 +23,19 @@ async function httpRequest<T>(requestMethod: http.RequestMethod, requestUrl: str
 }
 
 export class HttpUtils {
-  public static async get<T>(requestUrl: string, extraData?: Object): Promise<T> {
-    return await httpRequest<T>(http.RequestMethod.GET, requestUrl, extraData)
+  public static get<T>(requestUrl: string, extraData?: Object): Promise<T> {
+    return httpRequest<T>(http.RequestMethod.GET, requestUrl, extraData)
   }
 
-  public static async post<T>(requestUrl: string, extraData?: Object): Promise<T> {
-    return await httpRequest<T>(http.RequestMethod.POST, requestUrl, extraData)
+  public static post<T>(requestUrl: string, extraData?: Object): Promise<T> {
+    return httpRequest<T>(http.RequestMethod.POST, requestUrl, extraData)
   }
 
-  public static async put<T>(requestUrl: string, extraData?: Object): Promise<T> {
-    return await httpRequest<T>(http.RequestMethod.PUT, requestUrl, extraData)
+  public static put<T>(requestUrl: string, extraData?: Object): Promise<T> {
+    return httpRequest<T>(http.RequestMethod.PUT, requestUrl, extraData)
   }
 
-  public static async delete<T>(requestUrl: string, extraData?: Object): Promise<T> {
-    return await httpRequest<T>(http.RequestMethod.DELETE, requestUrl, extraData)
+  public static delete<T>(requestUrl: string, extraData?: Object): Promise<T> {
+    return httpRequest<T>(http.RequestMethod.DELETE, requestUrl, extraData)
   }
 }

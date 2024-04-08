@@ -1,6 +1,10 @@
 import { LoginParams } from '../model/params/LoginParams';
-import { HttpUtils } from '../utils/HttpUtils';
+import { HttpUtils } from '../api/HttpUtils';
 import promptAction from '@ohos.promptAction';
+import { login } from '../api/Api';
+import { SPUtils } from '../utils/SPUtils';
+import { Token } from '../constant/Constant';
+import router from '@ohos.router';
 
 export class LoginViewModel {
   /***
@@ -16,7 +20,8 @@ export class LoginViewModel {
       account: userName,
       password: password
     });
-    let token: string = await HttpUtils.post<string>('/driver/login/account', params)
-    promptAction.showToast({ message: token })
+    let token: string = await login(params)
+    SPUtils.putValue(Token, token)
+    router.replaceUrl({url: 'pages/HomePage'})
   }
 }
