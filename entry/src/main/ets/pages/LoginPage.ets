@@ -1,4 +1,4 @@
-import router from '@ohos.router'
+import { LoginViewModel } from '../viewmodel/LoginViewModel'
 
 @Entry
 @Component
@@ -11,6 +11,13 @@ struct LoginPage {
   @State passwordplaceholder: string = '请输入验证码'
   @State userNameErrorMessage: string = ''
   @State passwordErrorMessage: string = ''
+  @State userName: string = ''
+  @State password: string = ''
+  viewModel: LoginViewModel
+
+  aboutToAppear() {
+    this.viewModel = new LoginViewModel();
+  }
 
   build() {
     Column() {
@@ -32,16 +39,24 @@ struct LoginPage {
             this.userNameplaceholder = '请输入手机号'
             this.passwordplaceholder = '请输入验证码'
           }
+          this.userName = ''
+          this.password = ''
         }).fontColor($r('app.color.primary'))
       }.width('100%').margin({ top: 50 }).justifyContent(FlexAlign.SpaceBetween)
 
-      TextInput({ placeholder: this.userNameplaceholder })
+      TextInput({ placeholder: this.userNameplaceholder, text: this.userName })
         .textInputStyle(11, 55)
+        .onChange((content: string) => {
+          this.userName = content
+        })
       Text(this.userNameErrorMessage).margin({ top: 13 }).fontColor($r('app.color.primary'))
         .visibility(this.userNameErrorMessage === '' ? Visibility.Hidden : Visibility.Visible)
       Stack({ alignContent: Alignment.End }) {
-        TextInput({ placeholder: this.passwordplaceholder })
-          .textInputStyle(4, 20, InputType.Number)
+        TextInput({ placeholder: this.passwordplaceholder, text: this.password })
+          .textInputStyle(this.currentLoginTypeIsPassword ? 10 : 4, 20, this.currentLoginTypeIsPassword ? InputType.Password : InputType.Number)
+          .onChange((content: string) => {
+            this.password = content
+          }).showPasswordIcon(this.currentLoginTypeIsPassword)
         Divider()
           .height(26)
           .width(10)
@@ -58,7 +73,15 @@ struct LoginPage {
       Text(this.passwordErrorMessage).margin({ top: 13 }).fontColor($r('app.color.primary'))
         .visibility(this.passwordErrorMessage === '' ? Visibility.Hidden : Visibility.Visible)
 
-      Button('登录').width('100%').margin({ top: 20 }).height(50).backgroundColor($r('app.color.primary'))
+      Button('登录')
+        .width('100%')
+        .margin({ top: 20 })
+        .height(50)
+        .backgroundColor($r('app.color.primary'))
+        .enabled(this.viewModel.checkUserNameAndPassword(this.userName, this.password))
+        .onClick(() => {
+          this.viewModel.login(this.userName, this.password)
+        })
     }.width('100%').height('100%').alignItems(HorizontalAlign.Start).padding({ left: 33, right: 33 })
   }
 }
@@ -68,9 +91,25 @@ function textInputStyle(maxLength: number, topMargin: number, inputType?: InputT
   .maxLength(maxLength)
   .type(inputType ?? InputType.Normal)
   .borderWidth({ bottom: 1 })
-  .borderColor($r('app.color.primary'))
-  .backgroundColor(Color.Transparent)
   .borderRadius(0)
   .padding({ left: 0 })
   .margin({ top: topMargin })
+  .stateStyles({
+    focused: textInputFocused,
+    normal: textInputNormal,
+    //不设置这个会导致文本框点击的时候有灰色背景, 看官方文档, 暂时没有解决方案
+    pressed: textInputFocused
+  })
+}
+
+@Styles
+function textInputFocused() {
+  .borderColor($r('app.color.primary'))
+  .backgroundColor(Color.White)
+}
+
+@Styles
+function textInputNormal() {
+  .borderColor($r('app.color.border'))
+  .backgroundColor(Color.White)
 }

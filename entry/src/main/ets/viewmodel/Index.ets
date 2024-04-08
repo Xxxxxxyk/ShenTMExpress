@@ -1,1 +1,3 @@
-export * from './IndexViewModel'
+export * from './IndexViewModel';
+
+export * from './LoginViewModel';
