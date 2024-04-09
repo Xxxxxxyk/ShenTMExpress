@@ -1,4 +1,9 @@
-import { LoginViewModel } from '../viewmodel/LoginViewModel'
+import { Token } from '../constant/Index'
+import { LoginViewModel } from '../viewmodel/Index'
+
+
+PersistentStorage.PersistProp(Token, '')
+
 
 @Entry
 @Component

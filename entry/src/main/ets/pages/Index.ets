@@ -2,6 +2,10 @@ import { ADClass } from '../model/modelclass/ADClass';
 import { IndexViewModel } from '../viewmodel/IndexViewModel';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
+import { SPUtils } from '../utils/SPUtils';
+import { Token } from '../constant/Constant';
+
+PersistentStorage.PersistProp(Token, '')
 
 @Entry
 @Component
@@ -19,7 +23,7 @@ struct Index {
       this.defaultTime--
       if (this.defaultTime == 0) {
         clearInterval(this.timer)
-        router.pushUrl({ url: 'pages/LoginPage' })
+        this.gotoNext()
         return
       }
     }, 1000)
@@ -39,9 +43,19 @@ struct Index {
         .borderRadius(10)
         .onClick(() => {
           clearInterval(this.timer)
-          router.pushUrl({ url: 'pages/LoginPage' })
+          this.gotoNext()
         })
     }.backgroundColor(Color.White).width('100%').height('100%')
+  }
+
+  async gotoNext() {
+    let token: string = await SPUtils.getValue(Token) as string;
+    if (token !== '') {
+      AppStorage.SetOrCreate(Token, token)
+      router.pushUrl({ url: 'pages/HomePage' })
+    } else {
+      router.pushUrl({ url: 'pages/LoginPage' })
+    }
   }
 
   async getAdData() {

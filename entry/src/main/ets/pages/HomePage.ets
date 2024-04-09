@@ -1,6 +1,7 @@
 import router from '@ohos.router'
 import promptAction from '@ohos.promptAction'
 import { BottomBarModel } from '../model/modelclass/BottomBarModel'
+import { My } from './home/My';
 
 @Entry
 @Component
@@ -26,8 +27,14 @@ struct HomePage {
     Tabs({ barPosition: BarPosition.End }) {
       ForEach(this.barlist, (item: BottomBarModel, index: number) => {
         TabContent() {
+          if (index == 0) {
 
-        }.tabBar(this.tabBarStyle(item, index))
+          } else if (index == 1) {
+
+          } else {
+              My()
+          }
+        }.tabBar(this.tabBarStyle(item, index)).backgroundColor(Color.White)
       })
     }.scrollable(false).onChange((index: number) => {
       this.currentSelect = index

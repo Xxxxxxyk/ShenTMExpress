@@ -21,7 +21,8 @@ export class LoginViewModel {
       password: password
     });
     let token: string = await login(params)
+    AppStorage.SetOrCreate(Token, token)
     SPUtils.putValue(Token, token)
-    router.replaceUrl({url: 'pages/HomePage'})
+    router.replaceUrl({ url: 'pages/HomePage' })
   }
 }
